@@ -1,9 +1,9 @@
-// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import InfiniteScroll from 'infinite-scroll';
 import { fetchImages } from './api';
+import { PER_PAGE } from './constants';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
@@ -74,7 +74,7 @@ const infScroll = new InfiniteScroll('.gallery', {
       orientation: 'horizontal',
       safesearch: true,
       page: page,
-      per_page: 100,
+      per_page: PER_PAGE, // Використовуємо константу
     };
 
     const queryString = Object.entries(params)

@@ -1,6 +1,6 @@
 // api.js
 import axios from 'axios';
-import { API_KEY, BASE_URL, PER_PAGE } from './constans';
+import { API_KEY, BASE_URL, PER_PAGE } from './constants';
 
 async function fetchImages(query, page) {
   const params = {
