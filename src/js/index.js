@@ -1,7 +1,7 @@
-import axios from 'axios';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchImages } from './api';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
@@ -20,27 +20,12 @@ async function handleFormSubmit(event) {
   }
 
   try {
-    const images = await fetchImages(searchQuery);
+    const images = await fetchImages(searchQuery, page);
     updateGallery(images);
   } catch (error) {
     console.error('Error fetching images:', error);
     Notiflix.Notify.failure('Something went wrong. Please try again.');
   }
-}
-
-async function fetchImages(query) {
-  const apiKey = '27645938-d5cd7e38904ea';
-  const url = `https://pixabay.com/api/?key=${apiKey}&q=${query}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
-
-  const response = await axios.get(url);
-
-  if (response.data.hits.length === 0) {
-    Notiflix.Notify.info(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-  }
-
-  return response.data.hits;
 }
 
 function updateGallery(images) {
