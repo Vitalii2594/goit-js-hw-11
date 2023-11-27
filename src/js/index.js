@@ -1,3 +1,4 @@
+// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -73,8 +74,8 @@ const infScroll = new InfiniteScroll('.gallery', {
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
-      page: page,
-      per_page: PER_PAGE, // Використовуємо константу
+      page: ++page, // Збільшуємо номер сторінки для завантаження наступних 40 зображень
+      per_page: PER_PAGE,
     };
 
     const queryString = Object.entries(params)

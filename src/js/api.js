@@ -13,22 +13,18 @@ async function fetchImages(query, page) {
     per_page: PER_PAGE,
   };
 
-  const queryString = Object.entries(params)
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-    )
-    .join('&');
+  try {
+    const response = await axios.get(BASE_URL, { params });
+    const { hits } = response.data;
 
-  const url = `${BASE_URL}?${queryString}`;
+    if (hits.length === 0) {
+      throw new Error('No images found for the given query');
+    }
 
-  const response = await axios.get(url);
-
-  if (response.data.hits.length === 0) {
-    throw new Error('No images found for the given query');
+    return hits;
+  } catch (error) {
+    throw new Error('Error fetching images:', error);
   }
-
-  return response.data.hits;
 }
 
 export { fetchImages };
