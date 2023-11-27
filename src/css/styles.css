@@ -80,13 +80,13 @@ input {
 .info {
   display: flex;
   gap: 8px;
-
+  color: #ddd;
   padding: 8px;
   border-radius: 0 0 8px 8px;
 }
 
 .info p:hover {
-  color: #6fadef;
+  color: #9fbddc;
 }
 
 @media screen and (min-width: 668px) {
