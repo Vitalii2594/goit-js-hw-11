@@ -4,39 +4,11 @@
 
 body {
   background-color: #5b6c6e;
-  font-family: 'Arial', sans-serif; /* Додано шрифт для тексту на сторінці */
+  font-family: 'Arial', sans-serif;
 }
 
 img {
   max-width: 100%;
-}
-
-button {
-  display: block;
-  padding: 8px 16px;
-  background-color: #fff;
-  color: #007bff;
-  border: none;
-  cursor: pointer;
-  margin: auto;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.load-more-hidden {
-  display: none;
-}
-
-.load-more {
-  margin: auto;
-}
-
-.load-more:hover {
-  background-color: #6fadef;
-  transform: scale(1.05);
-}
-
-.load-more:disabled {
-  background-color: #c1c1c1;
 }
 
 .container {
@@ -56,28 +28,57 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center; /* Додано вирівнювання по центру */
-}
-
-.search-form {
-  margin: 0 auto;
-  display: flex;
-  margin-bottom: 16px;
   justify-content: center;
-  padding: 10px; /* Додано відступи для стилізації */
-  border-radius: 8px; /* Додано закруглення кутів */
+  padding: 12px;
+  border-radius: 8px;
+  transition: box-shadow 0.3s;
 }
 
-input {
-  width: 100%; /* Змінено ширину текстового поля на 100% */
+.photo-card {
+  flex-basis: calc((100% - 12px) / 2);
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.photo-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
+.photo-card a {
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+}
+
+.photo-card a img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px 8px 0 0;
+  transition: transform 0.3s;
+}
+
+.photo-card a:hover img {
+  transform: scale(1.1);
+}
+
+.info {
+  display: flex;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.7);
   padding: 8px;
-  margin-right: 8px; /* Додано відступ для візуальної чистоти */
+  border-radius: 0 0 8px 8px;
+}
+
+.info p:hover {
+  color: #6fadef;
 }
 
 @media screen and (min-width: 668px) {
-  .container {
-    max-width: 768px;
-  }
   .photo-card {
     flex-basis: calc((100% - 12px) / 2);
   }
@@ -90,9 +91,7 @@ input {
   .photo-card {
     flex-basis: calc((100% - 24px) / 3);
   }
-}
-
-.info {
-  display: flex;
-  gap: 8px;
+  .info:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
 }
