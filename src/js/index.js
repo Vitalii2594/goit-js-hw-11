@@ -1,3 +1,4 @@
+// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -12,10 +13,12 @@ form.addEventListener('submit', handleFormSubmit);
 
 async function handleFormSubmit(event) {
   event.preventDefault();
-  page = 1; // Скидання сторінки при новому пошуку
+  page = 1;
+
   const searchQuery = event.target.elements.searchQuery.value.trim();
 
   if (searchQuery === '') {
+    Notiflix.Notify.warning('Please enter a search query.');
     return;
   }
 
@@ -37,12 +40,11 @@ function updateGallery(images) {
   const cardsHtml = images.map(createCardHtml).join('');
 
   if (page === 1) {
-    gallery.innerHTML = cardsHtml; // Очищення галереї для нових результатів пошуку
+    gallery.innerHTML = cardsHtml;
   } else {
-    gallery.innerHTML += cardsHtml; // Додавання нових зображень до поточного списку
+    gallery.innerHTML += cardsHtml;
   }
 
-  // Ініціалізація SimpleLightbox
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 }
@@ -63,7 +65,6 @@ function createCardHtml(image) {
   `;
 }
 
-// Використовуємо Infinite Scroll
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     const params = {
