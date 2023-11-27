@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: #cee3e5;
+  background-color: #5b6c6e;
   font-family: 'Arial', sans-serif; /* Додано шрифт для тексту на сторінці */
 }
 
@@ -64,7 +64,6 @@ button {
   display: flex;
   margin-bottom: 16px;
   justify-content: center;
-  background-color: #007bff; /* Змінено колір фону форми на синій */
   padding: 10px; /* Додано відступи для стилізації */
   border-radius: 8px; /* Додано закруглення кутів */
 }

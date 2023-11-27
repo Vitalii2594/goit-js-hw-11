@@ -60,6 +60,7 @@ function createCardHtml(image) {
 }
 
 // Use Infinite Scroll
+// Use Infinite Scroll
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     const params = {
