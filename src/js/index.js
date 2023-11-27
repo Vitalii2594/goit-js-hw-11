@@ -62,7 +62,7 @@ function createCardHtml(image) {
 // Use Infinite Scroll
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    return `https://pixabay.com/api/?key=YOUR_PIXABAY_API_KEY&q=${form.elements.searchQuery.value.trim()}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
+    return `https://pixabay.com/api/?key=27645938-d5cd7e38904ea113c0dc0ae51&q=${form.elements.searchQuery.value.trim()}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
   },
   responseType: 'text',
   history: false,
