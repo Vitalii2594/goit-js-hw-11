@@ -1,11 +1,11 @@
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import InfiniteScroll from 'infinite-scroll';
 import { fetchImages } from './api';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
-const loadMoreBtn = document.querySelector('.load-more');
 let page = 1;
 
 form.addEventListener('submit', handleFormSubmit);
@@ -37,14 +37,10 @@ function updateGallery(images) {
   gallery.innerHTML += cardsHtml;
 
   page += 1;
-  loadMoreBtn.style.display = 'block';
 
   // Initialize SimpleLightbox
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
-
-  // Scroll to the newly loaded images
-  scrollToNewImages();
 }
 
 function createCardHtml(image) {
@@ -63,12 +59,24 @@ function createCardHtml(image) {
   `;
 }
 
-function scrollToNewImages() {
-  const { height: cardHeight } =
-    gallery.firstElementChild.getBoundingClientRect();
+// Use Infinite Scroll
+const infScroll = new InfiniteScroll('.gallery', {
+  path: function () {
+    return `https://pixabay.com/api/?key=YOUR_PIXABAY_API_KEY&q=${form.elements.searchQuery.value.trim()}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`;
+  },
+  responseType: 'text',
+  history: false,
+  scrollThreshold: 300,
+});
 
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
+infScroll.on('load', function (response) {
+  const data = JSON.parse(response);
+  const images = data.hits;
+
+  if (images.length === 0) {
+    Notiflix.Notify.info('Sorry, there are no more images.');
+    infScroll.destroy(); // Disable infinite scroll if no more images
+  } else {
+    updateGallery(images);
+  }
+});
