@@ -7,11 +7,13 @@ body {
 .container {
   max-width: 800px;
   margin: 20px auto;
+  background-color: darkgray;
 }
 
 .search-form {
   display: flex;
   margin-bottom: 20px;
+  background-color: #007bff;
 }
 
 input[type='text'] {
