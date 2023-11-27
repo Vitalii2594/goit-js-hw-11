@@ -10,5 +10,5 @@
         <p class="info-item"><b>Downloads:</b> ${t.downloads}</p>
       </div>
     </div>
-  `}e5.addEventListener("submit",e4);let ot=new(t(S))(".gallery",{path:function(){return`https://pixabay.com/api/?key=27645938-d5cd7e38904ea113c0dc0ae51&q=${e5.elements.searchQuery.value.trim()}&image_type=photo&orientation=horizontal&safesearch=true&page=${e8}&per_page=40`},responseType:"text",history:!1,scrollThreshold:300});ot.on("load",function(e){let o=JSON.parse(e).hits;0===o.length?(t(g).Notify.info("Sorry, there are no more images."),ot.destroy()):e9(o)})}();
-//# sourceMappingURL=index.cdad6855.js.map
+  `}e5.addEventListener("submit",e4);let ot=new(t(S))(".gallery",{path:function(){return`https://pixabay.com/api/?key=27645938-d5cd7e38904ea113c0dc0ae51&q=${e5.elements.searchQuery.value.trim()}&image_type=photo&orientation=horizontal&safesearch=true&page=${e8}&per_page=200`},responseType:"text",history:!1,scrollThreshold:300});ot.on("load",function(e){let o=JSON.parse(e).hits;0===o.length?(t(g).Notify.info("Sorry, there are no more images."),ot.destroy()):e9(o)})}();
+//# sourceMappingURL=index.7f2699a6.js.map
