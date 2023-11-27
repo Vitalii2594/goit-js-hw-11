@@ -10,5 +10,5 @@
         <p class="info-item"><b>Downloads:</b> ${t.downloads}</p>
       </div>
     </div>
-  `}e5.addEventListener("submit",e4),new(t(S))(".gallery",{path:function(){let t=Object.entries({key:"27645938-d5cd7e38904ea113c0dc0ae51",q:e5.elements.searchQuery.value.trim(),image_type:"photo",orientation:"horizontal",safesearch:!0,page:e8,per_page:100}).map(([t,e])=>`${encodeURIComponent(t)}=${encodeURIComponent(e)}`).join("&");return`https://pixabay.com/api/?${t}`},responseType:"text",history:!1,scrollThreshold:300}).on("load",async function(){try{let t=await e6(e5.elements.searchQuery.value.trim(),e8);e9(t)}catch(e){console.error("Error fetching more images:",e),t(g).Notify.failure("Something went wrong while loading more images.")}})}();
-//# sourceMappingURL=index.0e90f01e.js.map
+  `}e5.addEventListener("submit",e4),new(t(S))(".gallery",{path:function(){let t=Object.entries({key:"27645938-d5cd7e38904ea113c0dc0ae51",q:e5.elements.searchQuery.value.trim(),image_type:"photo",orientation:"horizontal",safesearch:!0,page:e8,per_page:40}).map(([t,e])=>`${encodeURIComponent(t)}=${encodeURIComponent(e)}`).join("&");return`https://pixabay.com/api/?${t}`},responseType:"text",history:!1,scrollThreshold:300}).on("load",async function(){try{let t=await e6(e5.elements.searchQuery.value.trim(),e8);e9(t)}catch(e){console.error("Error fetching more images:",e),t(g).Notify.failure("Something went wrong while loading more images.")}})}();
+//# sourceMappingURL=index.1657d1d1.js.map
