@@ -12,7 +12,7 @@ form.addEventListener('submit', handleFormSubmit);
 
 async function handleFormSubmit(event) {
   event.preventDefault();
-  page = 1; // Reset page when a new search is initiated
+  page = 1; // Скидання сторінки при новому пошуку
   const searchQuery = event.target.elements.searchQuery.value.trim();
 
   if (searchQuery === '') {
@@ -29,16 +29,20 @@ async function handleFormSubmit(event) {
 }
 
 function updateGallery(images) {
-  if (page === 1) {
-    gallery.innerHTML = ''; // Clear the gallery for new search results
+  if (!images || images.length === 0) {
+    Notiflix.Notify.info('No images found.');
+    return;
   }
 
   const cardsHtml = images.map(createCardHtml).join('');
-  gallery.innerHTML += cardsHtml;
 
-  page += 1;
+  if (page === 1) {
+    gallery.innerHTML = cardsHtml; // Очищення галереї для нових результатів пошуку
+  } else {
+    gallery.innerHTML += cardsHtml; // Додавання нових зображень до поточного списку
+  }
 
-  // Initialize SimpleLightbox
+  // Ініціалізація SimpleLightbox
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 }
@@ -59,8 +63,7 @@ function createCardHtml(image) {
   `;
 }
 
-// Use Infinite Scroll
-// Use Infinite Scroll
+// Використовуємо Infinite Scroll
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     const params = {
@@ -87,14 +90,15 @@ const infScroll = new InfiniteScroll('.gallery', {
   scrollThreshold: 300,
 });
 
-infScroll.on('load', function (response) {
-  const data = JSON.parse(response);
-  const images = data.hits;
-
-  if (images.length === 0) {
-    Notiflix.Notify.info('Sorry, there are no more images.');
-    infScroll.destroy(); // Disable infinite scroll if no more images
-  } else {
+infScroll.on('load', async function () {
+  try {
+    const images = await fetchImages(
+      form.elements.searchQuery.value.trim(),
+      page
+    );
     updateGallery(images);
+  } catch (error) {
+    console.error('Error fetching more images:', error);
+    Notiflix.Notify.failure('Something went wrong while loading more images.');
   }
 });
