@@ -1,3 +1,4 @@
+// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -23,8 +24,9 @@ async function handleFormSubmit(event) {
   }
 
   try {
-    const images = await fetchImages(searchQuery, page);
+    const { total, images } = await fetchImages(searchQuery, page);
     updateGallery(images);
+    Notiflix.Notify.info(`Found ${total} images for "${searchQuery}".`);
   } catch (error) {
     console.error('Error fetching images:', error);
     Notiflix.Notify.failure('Something went wrong. Please try again.');
@@ -106,7 +108,7 @@ const infScroll = new InfiniteScroll('.gallery', {
 
 infScroll.on('load', async function () {
   try {
-    const images = await fetchImages(
+    const { total, images } = await fetchImages(
       form.elements.searchQuery.value.trim(),
       page
     );
@@ -116,6 +118,10 @@ infScroll.on('load', async function () {
 
       setTimeout(scrollToBottom, 500);
     }
+
+    Notiflix.Notify.info(
+      `Found ${total} images for "${form.elements.searchQuery.value.trim()}".`
+    );
   } catch (error) {
     console.error('Error fetching more images:', error);
     Notiflix.Notify.failure('Something went wrong while loading more images.');
