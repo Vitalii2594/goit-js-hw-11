@@ -1,15 +1,14 @@
-// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import InfiniteScroll from 'infinite-scroll';
-import { fetchImages } from './api'; // Ваша функція для отримання зображень
-import { PER_PAGE } from './constants'; // Ваша константа
+import { fetchImages } from './api';
+import { PER_PAGE } from './constants';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
-let loading = false;
+let loading = false; // Додали змінну, яка вказує, чи вже відбувається завантаження
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -54,34 +53,42 @@ function createCardHtml(image) {
 }
 
 async function loadImages() {
+  // Якщо вже відбувається завантаження, не відправляти новий запит
   if (loading) {
     return;
   }
 
-  loading = true;
+  loading = true; // Позначаємо, що розпочинається завантаження
 
   try {
-    const images = await fetchImages(
+    const result = await fetchImages(
       form.elements.searchQuery.value.trim(),
       page
     );
-    updateGallery(images);
-    page++;
+
+    if (page === 1) {
+      const { totalHits } = result;
+      Notiflix.Notify.success(`Total images found: ${totalHits}`);
+    }
+
+    updateGallery(result.images);
+    loading = false; // Позначаємо, що завантаження завершилося
+    page++; // Збільшуємо номер сторінки для наступного завантаження
   } catch (error) {
     console.error('Error fetching images:', error);
     Notiflix.Notify.failure('Something went wrong. Please try again.');
-  } finally {
-    loading = false;
+    loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
   }
 }
 
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    return ' ';
+    return ' '; // Повертаємо простий рядок, оскільки дані вже завантажуються з `loadImages`
   },
   responseType: 'text',
   history: false,
   scrollThreshold: 300,
 });
 
+// При прокручуванні вниз викликаємо функцію `loadImages`
 infScroll.on('scrollThreshold', loadImages);
