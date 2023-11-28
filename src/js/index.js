@@ -2,7 +2,9 @@
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImages } from './api';
+import InfiniteScroll from 'infinite-scroll';
+import { fetchImages } from './api'; // Ваша функція для отримання зображень
+import { PER_PAGE } from './constants'; // Ваша константа
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
@@ -59,16 +61,10 @@ async function loadImages() {
   loading = true;
 
   try {
-    const result = await fetchImages(
+    const images = await fetchImages(
       form.elements.searchQuery.value.trim(),
       page
     );
-    const { images, totalHits } = result;
-
-    if (page === 1) {
-      Notiflix.Notify.success(`Total images found: ${totalHits}`);
-    }
-
     updateGallery(images);
     page++;
   } catch (error) {
@@ -79,10 +75,13 @@ async function loadImages() {
   }
 }
 
-// При кожному прокручуванні вниз викликаємо функцію `loadImages`
-window.addEventListener('scroll', () => {
-  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-  if (scrollTop + clientHeight >= scrollHeight - 300) {
-    loadImages();
-  }
+const infScroll = new InfiniteScroll('.gallery', {
+  path: function () {
+    return ' ';
+  },
+  responseType: 'text',
+  history: false,
+  scrollThreshold: 300,
 });
+
+infScroll.on('scrollThreshold', loadImages);
