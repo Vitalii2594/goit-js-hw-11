@@ -10,7 +10,6 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHitsDisplayed = false;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -18,7 +17,6 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
   hasMoreImages = true;
-  totalHitsDisplayed = false;
   loadImages();
 }
 
@@ -39,10 +37,8 @@ function updateGallery(images) {
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 
-  // Виведення повідомлення, якщо воно ще не відображалося
-  if (!totalHitsDisplayed && images[0].totalHits !== undefined) {
-    Notiflix.Notify.success(`Total images found: ${images[0].totalHits}`);
-    totalHitsDisplayed = true;
+  if (images[0].totalHits !== undefined) {
+    Notiflix.Notify.success(`Hooray! We found ${images[0].totalHits} images.`);
   }
 }
 
