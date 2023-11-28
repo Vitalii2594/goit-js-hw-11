@@ -10,5 +10,5 @@ function t(t){return t&&t.__esModule?t.default:t}var e,o,i,n,r,a,s,l,c,f="undefi
         <p class="info-item"><b>Downloads:</b> ${t.downloads}</p>
       </div>
     </div>
-  `}function ot(){e4||(e4=!0,e6(e5.elements.searchQuery.value.trim(),e8).then(e=>{(function(e){if(!e||0===e.length){t(g).Notify.info("No images found.");return}let o=e.map(e7).join("");1===e8?e3.innerHTML=o:e3.innerHTML+=o,new(t(y))(".gallery a").refresh()})(e),e4=!1,e8++}).catch(e=>{console.error("Error fetching images:",e),t(g).Notify.failure("Something went wrong. Please try again."),e4=!1}))}e5.addEventListener("submit",e9),new(t(S))(".gallery",{path:function(){return" "},responseType:"text",history:!1,scrollThreshold:300}).on("scrollThreshold",ot);
-//# sourceMappingURL=index.9b376100.js.map
+  `}function ot(){e4||(e4=!0,e6(e5.elements.searchQuery.value.trim(),e8).then(e=>{let{images:o,totalHits:i}=e;1===e8&&t(g).Notify.success(`Total images found: ${i}`),function(e){if(!e||0===e.length){t(g).Notify.info("No images found.");return}let o=e.map(e7).join("");1===e8?e3.innerHTML=o:e3.innerHTML+=o,new(t(y))(".gallery a").refresh()}(o),e4=!1,e8++}).catch(e=>{console.error("Error fetching images:",e),t(g).Notify.failure("Something went wrong. Please try again."),e4=!1}))}e5.addEventListener("submit",e9),new(t(S))(".gallery",{path:function(){return" "},responseType:"text",history:!1,scrollThreshold:300}).on("scrollThreshold",ot);
+//# sourceMappingURL=index.43874233.js.map
