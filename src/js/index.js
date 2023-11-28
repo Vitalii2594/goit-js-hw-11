@@ -10,7 +10,7 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHits = 0;
+let totalHits; // Змінна для зберігання кількості зображень
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -18,7 +18,7 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
   hasMoreImages = true;
-  totalHits = 0;
+  totalHits = undefined; // Скидаємо значення кількості при новому запиті
   loadImages();
 }
 
@@ -32,6 +32,14 @@ function updateGallery(images) {
 
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
+
+    if (totalHits === undefined) {
+      // Виводимо повідомлення тільки при першому завантаженні
+      Notiflix.Notify.success(
+        `Hooray! We found ${images[0].totalHits} images.`
+      );
+      totalHits = images[0].totalHits; // Зберігаємо значення кількості для подальших порівнянь
+    }
   } else {
     gallery.innerHTML += cardsHtml;
   }
@@ -63,21 +71,15 @@ function loadImages() {
 
   loading = true;
 
-  // Запит до сервера для отримання зображень
   fetchImages(form.elements.searchQuery.value.trim(), page)
     .then(images => {
       if (images.length < PER_PAGE) {
         hasMoreImages = false;
       }
 
-      totalHits = images[0].totalHits; // Оновлюємо загальну кількість зображень
-
       updateGallery(images);
       loading = false;
       page++;
-
-      // Виводимо повідомлення про кількість зображень після отримання даних від сервера
-      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
 
       console.log(`Page: ${page}, Total Images: ${images.length}`);
     })
@@ -88,7 +90,6 @@ function loadImages() {
     });
 }
 
-// Налаштування для підзавантаження зображень при прокрутці
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     return ' ';
@@ -98,5 +99,4 @@ const infScroll = new InfiniteScroll('.gallery', {
   scrollThreshold: 300,
 });
 
-// Обробник події для підзавантаження зображень при досягненні певного порогу прокрутки
 infScroll.on('scrollThreshold', loadImages);
