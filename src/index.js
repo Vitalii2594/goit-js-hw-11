@@ -1,4 +1,3 @@
-// index.js
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -66,15 +65,28 @@ function createCardHtml(image) {
   `;
 }
 
+function scrollToBottom() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
+    const currentPage = page++;
+
     const params = {
       key: '27645938-d5cd7e38904ea113c0dc0ae51',
       q: form.elements.searchQuery.value.trim(),
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
-      page: ++page, // Збільшуємо номер сторінки для завантаження наступних 40 зображень
+      page: currentPage,
       per_page: PER_PAGE,
     };
 
@@ -98,7 +110,12 @@ infScroll.on('load', async function () {
       form.elements.searchQuery.value.trim(),
       page
     );
-    updateGallery(images);
+
+    if (images && images.length > 0) {
+      updateGallery(images);
+
+      setTimeout(scrollToBottom, 500);
+    }
   } catch (error) {
     console.error('Error fetching more images:', error);
     Notiflix.Notify.failure('Something went wrong while loading more images.');
