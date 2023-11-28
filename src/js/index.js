@@ -39,7 +39,7 @@ function updateGallery(images) {
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 
-  if (!totalHitsDisplayed && images[0]?.totalHits !== undefined) {
+  if (!totalHitsDisplayed && images[0].totalHits !== undefined) {
     Notiflix.Notify.success(`Hooray! We found ${images[0].totalHits} images.`);
     totalHitsDisplayed = true;
   }
