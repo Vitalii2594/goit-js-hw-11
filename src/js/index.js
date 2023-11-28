@@ -40,8 +40,8 @@ function updateGallery(images) {
   lightbox.refresh();
 
   // Виведення повідомлення, якщо воно ще не відображалося
-  if (!totalHitsDisplayed && images.totalHits !== undefined) {
-    Notiflix.Notify.success(`Total images found: ${images.totalHits}`);
+  if (!totalHitsDisplayed && images[0].totalHits !== undefined) {
+    Notiflix.Notify.success(`Total images found: ${images[0].totalHits}`);
     totalHitsDisplayed = true;
   }
 }
