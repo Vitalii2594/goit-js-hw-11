@@ -52,7 +52,7 @@ function createCardHtml(image) {
   `;
 }
 
-async function loadImages() {
+function loadImages() {
   // Якщо вже відбувається завантаження, не відправляти новий запит
   if (loading) {
     return;
@@ -60,25 +60,18 @@ async function loadImages() {
 
   loading = true; // Позначаємо, що розпочинається завантаження
 
-  try {
-    const result = await fetchImages(
-      form.elements.searchQuery.value.trim(),
-      page
-    );
-
-    if (page === 1) {
-      const { totalHits } = result;
-      Notiflix.Notify.success(`Total images found: ${totalHits}`);
-    }
-
-    updateGallery(result.images);
-    loading = false; // Позначаємо, що завантаження завершилося
-    page++; // Збільшуємо номер сторінки для наступного завантаження
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    Notiflix.Notify.failure('Something went wrong. Please try again.');
-    loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
-  }
+  // Використовуємо `fetchImages` для отримання зображень
+  fetchImages(form.elements.searchQuery.value.trim(), page)
+    .then(images => {
+      updateGallery(images);
+      loading = false; // Позначаємо, що завантаження завершилося
+      page++; // Збільшуємо номер сторінки для наступного завантаження
+    })
+    .catch(error => {
+      console.error('Error fetching images:', error);
+      Notiflix.Notify.failure('Something went wrong. Please try again.');
+      loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
+    });
 }
 
 const infScroll = new InfiniteScroll('.gallery', {
