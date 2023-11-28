@@ -54,24 +54,28 @@ function createCardHtml(image) {
 }
 
 function loadImages() {
-  // Якщо вже відбувається завантаження, не відправляти новий запит
   if (loading) {
     return;
   }
 
-  loading = true; // Позначаємо, що розпочинається завантаження
+  loading = true;
 
-  // Використовуємо `fetchImages` для отримання зображень
   fetchImages(form.elements.searchQuery.value.trim(), page)
-    .then(images => {
+    .then(result => {
+      const { images, totalHits } = result;
+
+      if (page === 1) {
+        Notiflix.Notify.success(`Total images found: ${totalHits}`);
+      }
+
       updateGallery(images);
-      loading = false; // Позначаємо, що завантаження завершилося
-      page++; // Збільшуємо номер сторінки для наступного завантаження
+      loading = false;
+      page++;
     })
     .catch(error => {
       console.error('Error fetching images:', error);
       Notiflix.Notify.failure('Something went wrong. Please try again.');
-      loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
+      loading = false;
     });
 }
 
