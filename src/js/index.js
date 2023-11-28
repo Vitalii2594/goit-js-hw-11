@@ -9,27 +9,14 @@ import { PER_PAGE } from './constants';
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
+let loading = false; // Додали змінну, яка вказує, чи вже відбувається завантаження
 
 form.addEventListener('submit', handleFormSubmit);
 
 async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
-
-  const searchQuery = event.target.elements.searchQuery.value.trim();
-
-  if (searchQuery === '') {
-    Notiflix.Notify.warning('Please enter a search query.');
-    return;
-  }
-
-  try {
-    const images = await fetchImages(searchQuery, page);
-    updateGallery(images);
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    Notiflix.Notify.failure('Something went wrong. Please try again.');
-  }
+  loadImages();
 }
 
 function updateGallery(images) {
@@ -66,41 +53,36 @@ function createCardHtml(image) {
   `;
 }
 
+function loadImages() {
+  // Якщо вже відбувається завантаження, не відправляти новий запит
+  if (loading) {
+    return;
+  }
+
+  loading = true; // Позначаємо, що розпочинається завантаження
+
+  // Використовуємо `fetchImages` для отримання зображень
+  fetchImages(form.elements.searchQuery.value.trim(), page)
+    .then(images => {
+      updateGallery(images);
+      loading = false; // Позначаємо, що завантаження завершилося
+      page++; // Збільшуємо номер сторінки для наступного завантаження
+    })
+    .catch(error => {
+      console.error('Error fetching images:', error);
+      Notiflix.Notify.failure('Something went wrong. Please try again.');
+      loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
+    });
+}
+
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    const params = {
-      key: '27645938-d5cd7e38904ea113c0dc0ae51',
-      q: form.elements.searchQuery.value.trim(),
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-      page: ++page,
-      per_page: PER_PAGE,
-    };
-
-    const queryString = Object.entries(params)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-      )
-      .join('&');
-
-    return `https://pixabay.com/api/?${queryString}`;
+    return ' '; // Повертаємо простий рядок, оскільки дані вже завантажуються з `loadImages`
   },
   responseType: 'text',
   history: false,
   scrollThreshold: 300,
 });
 
-infScroll.on('load', async function () {
-  try {
-    const images = await fetchImages(
-      form.elements.searchQuery.value.trim(),
-      page
-    );
-    updateGallery(images);
-  } catch (error) {
-    console.error('Error fetching more images:', error);
-    Notiflix.Notify.failure('Something went wrong while loading more images.');
-  }
-});
+// При прокручуванні вниз викликаємо функцію `loadImages`
+infScroll.on('scrollThreshold', loadImages);
