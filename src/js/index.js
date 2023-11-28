@@ -9,12 +9,14 @@ const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
+let hasMoreImages = true;
 
 form.addEventListener('submit', handleFormSubmit);
 
 async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
+  hasMoreImages = true; // Додали змінну для визначення, чи є ще зображення
   loadImages();
 }
 
@@ -53,7 +55,7 @@ function createCardHtml(image) {
 }
 
 function loadImages() {
-  if (loading) {
+  if (loading || !hasMoreImages) {
     return;
   }
 
@@ -62,13 +64,14 @@ function loadImages() {
   fetchImages(form.elements.searchQuery.value.trim(), page)
     .then(images => {
       if (images.length < PER_PAGE) {
-        loading = false;
-        return;
+        hasMoreImages = false;
       }
 
       updateGallery(images);
       loading = false;
       page++;
+
+      console.log(`Page: ${page}, Total Images: ${images.length}`);
     })
     .catch(error => {
       console.error('Error fetching images:', error);
@@ -84,14 +87,6 @@ const infScroll = new InfiniteScroll('.gallery', {
   responseType: 'text',
   history: false,
   scrollThreshold: 300,
-  outlayer: false,
-  status: '.scroll-status',
-  onInit: function () {
-    if (this.loadCount < PER_PAGE) {
-      this.off('scrollThreshold', this._onScrollThreshold);
-      this.disableHistory();
-    }
-  },
 });
 
 infScroll.on('scrollThreshold', loadImages);
