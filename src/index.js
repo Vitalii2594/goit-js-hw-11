@@ -24,9 +24,8 @@ async function handleFormSubmit(event) {
   }
 
   try {
-    const { total, images } = await fetchImages(searchQuery, page);
+    const images = await fetchImages(searchQuery, page);
     updateGallery(images);
-    Notiflix.Notify.info(`Found ${total} images for "${searchQuery}".`);
   } catch (error) {
     console.error('Error fetching images:', error);
     Notiflix.Notify.failure('Something went wrong. Please try again.');
@@ -67,28 +66,15 @@ function createCardHtml(image) {
   `;
 }
 
-function scrollToBottom() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
-
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    const currentPage = page++;
-
     const params = {
       key: '27645938-d5cd7e38904ea113c0dc0ae51',
       q: form.elements.searchQuery.value.trim(),
       image_type: 'photo',
       orientation: 'horizontal',
       safesearch: true,
-      page: currentPage,
+      page: ++page,
       per_page: PER_PAGE,
     };
 
@@ -108,20 +94,11 @@ const infScroll = new InfiniteScroll('.gallery', {
 
 infScroll.on('load', async function () {
   try {
-    const { total, images } = await fetchImages(
+    const images = await fetchImages(
       form.elements.searchQuery.value.trim(),
       page
     );
-
-    if (images && images.length > 0) {
-      updateGallery(images);
-
-      setTimeout(scrollToBottom, 500);
-    }
-
-    Notiflix.Notify.info(
-      `Found ${total} images for "${form.elements.searchQuery.value.trim()}".`
-    );
+    updateGallery(images);
   } catch (error) {
     console.error('Error fetching more images:', error);
     Notiflix.Notify.failure('Something went wrong while loading more images.');
