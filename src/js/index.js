@@ -10,7 +10,7 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHits; // Змінна для зберігання кількості зображень
+let totalHits;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -18,7 +18,7 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
   hasMoreImages = true;
-  totalHits = undefined; // Скидаємо значення кількості при новому запиті
+  totalHits = undefined;
   loadImages();
 }
 
@@ -32,20 +32,17 @@ function updateGallery(images) {
 
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
-
-    if (totalHits === undefined) {
-      // Виводимо повідомлення тільки при першому завантаженні
-      Notiflix.Notify.success(
-        `Hooray! We found ${images[0].totalHits} images.`
-      );
-      totalHits = images[0].totalHits; // Зберігаємо значення кількості для подальших порівнянь
-    }
   } else {
     gallery.innerHTML += cardsHtml;
   }
 
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
+
+  if (totalHits === undefined) {
+    totalHits = images[0].totalHits;
+    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+  }
 }
 
 function createCardHtml(image) {
