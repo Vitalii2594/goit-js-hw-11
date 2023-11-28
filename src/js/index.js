@@ -38,6 +38,12 @@ function updateGallery(images) {
 
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
+
+  // Виведення повідомлення, якщо воно ще не відображалося
+  if (!totalHitsDisplayed && images.totalHits !== undefined) {
+    Notiflix.Notify.success(`Total images found: ${images.totalHits}`);
+    totalHitsDisplayed = true;
+  }
 }
 
 function createCardHtml(image) {
@@ -67,11 +73,6 @@ function loadImages() {
     .then(images => {
       if (images.length < PER_PAGE) {
         hasMoreImages = false;
-      }
-
-      if (!totalHitsDisplayed) {
-        Notiflix.Notify.success(`Total images found: ${images.totalHits}`);
-        totalHitsDisplayed = true;
       }
 
       updateGallery(images);
