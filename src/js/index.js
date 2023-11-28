@@ -10,7 +10,7 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHits;
+let totalHits = 0;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -32,9 +32,6 @@ function updateGallery(images) {
 
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
-
-    // Виводимо повідомлення тільки при першому завантаженні
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
   } else {
     gallery.innerHTML += cardsHtml;
   }
@@ -66,6 +63,7 @@ function loadImages() {
 
   loading = true;
 
+  // Запит до сервера для отримання зображень
   fetchImages(form.elements.searchQuery.value.trim(), page)
     .then(images => {
       if (images.length < PER_PAGE) {
@@ -78,6 +76,9 @@ function loadImages() {
       loading = false;
       page++;
 
+      // Виводимо повідомлення про кількість зображень після отримання даних від сервера
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+
       console.log(`Page: ${page}, Total Images: ${images.length}`);
     })
     .catch(error => {
@@ -87,6 +88,7 @@ function loadImages() {
     });
 }
 
+// Налаштування для підзавантаження зображень при прокрутці
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     return ' ';
@@ -96,4 +98,5 @@ const infScroll = new InfiniteScroll('.gallery', {
   scrollThreshold: 300,
 });
 
+// Обробник події для підзавантаження зображень при досягненні певного порогу прокрутки
 infScroll.on('scrollThreshold', loadImages);
