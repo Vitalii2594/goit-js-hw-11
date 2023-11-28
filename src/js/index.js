@@ -8,7 +8,7 @@ import { PER_PAGE } from './constants';
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
-let loading = false; // Додали змінну, яка вказує, чи вже відбувається завантаження
+let loading = false;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -53,35 +53,45 @@ function createCardHtml(image) {
 }
 
 function loadImages() {
-  // Якщо вже відбувається завантаження, не відправляти новий запит
   if (loading) {
     return;
   }
 
-  loading = true; // Позначаємо, що розпочинається завантаження
+  loading = true;
 
-  // Використовуємо `fetchImages` для отримання зображень
   fetchImages(form.elements.searchQuery.value.trim(), page)
     .then(images => {
+      if (images.length < PER_PAGE) {
+        loading = false;
+        return;
+      }
+
       updateGallery(images);
-      loading = false; // Позначаємо, що завантаження завершилося
-      page++; // Збільшуємо номер сторінки для наступного завантаження
+      loading = false;
+      page++;
     })
     .catch(error => {
       console.error('Error fetching images:', error);
       Notiflix.Notify.failure('Something went wrong. Please try again.');
-      loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
+      loading = false;
     });
 }
 
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    return ' '; // Повертаємо простий рядок, оскільки дані вже завантажуються з `loadImages`
+    return ' ';
   },
   responseType: 'text',
   history: false,
   scrollThreshold: 300,
+  outlayer: false,
+  status: '.scroll-status',
+  onInit: function () {
+    if (this.loadCount < PER_PAGE) {
+      this.off('scrollThreshold', this._onScrollThreshold);
+      this.disableHistory();
+    }
+  },
 });
 
-// При прокручуванні вниз викликаємо функцію `loadImages`
 infScroll.on('scrollThreshold', loadImages);
