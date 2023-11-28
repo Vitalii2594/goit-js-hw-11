@@ -2,14 +2,12 @@
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import InfiniteScroll from 'infinite-scroll';
 import { fetchImages } from './api';
-import { PER_PAGE } from './constants';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
-let loading = false; // Додали змінну, яка вказує, чи вже відбувається завантаження
+let loading = false;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -53,40 +51,38 @@ function createCardHtml(image) {
   `;
 }
 
-function loadImages() {
+async function loadImages() {
   if (loading) {
     return;
   }
 
   loading = true;
 
-  fetchImages(form.elements.searchQuery.value.trim(), page)
-    .then(result => {
-      const { images, totalHits } = result;
+  try {
+    const result = await fetchImages(
+      form.elements.searchQuery.value.trim(),
+      page
+    );
+    const { images, totalHits } = result;
 
-      if (page === 1) {
-        Notiflix.Notify.success(`Total images found: ${totalHits}`);
-      }
+    if (page === 1) {
+      Notiflix.Notify.success(`Total images found: ${totalHits}`);
+    }
 
-      updateGallery(images);
-      loading = false;
-      page++;
-    })
-    .catch(error => {
-      console.error('Error fetching images:', error);
-      Notiflix.Notify.failure('Something went wrong. Please try again.');
-      loading = false;
-    });
+    updateGallery(images);
+    page++;
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    Notiflix.Notify.failure('Something went wrong. Please try again.');
+  } finally {
+    loading = false;
+  }
 }
 
-const infScroll = new InfiniteScroll('.gallery', {
-  path: function () {
-    return ' '; // Повертаємо простий рядок, оскільки дані вже завантажуються з `loadImages`
-  },
-  responseType: 'text',
-  history: false,
-  scrollThreshold: 300,
+// При кожному прокручуванні вниз викликаємо функцію `loadImages`
+window.addEventListener('scroll', () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+  if (scrollTop + clientHeight >= scrollHeight - 300) {
+    loadImages();
+  }
 });
-
-// При прокручуванні вниз викликаємо функцію `loadImages`
-infScroll.on('scrollThreshold', loadImages);
