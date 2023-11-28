@@ -7,10 +7,11 @@ import { PER_PAGE } from './constants';
 
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
+const totalImagesInfo = document.querySelector('.total-images-info');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHitsDisplayed = false;
+let totalImagesCount = 0;
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -18,7 +19,7 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
   hasMoreImages = true;
-  totalHitsDisplayed = false;
+  totalImagesCount = 0;
   loadImages();
 }
 
@@ -32,6 +33,8 @@ function updateGallery(images) {
 
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
+    totalImagesCount = images.totalHits;
+    totalImagesInfo.textContent = `Total Images found: ${totalImagesCount}`;
   } else {
     gallery.innerHTML += cardsHtml;
   }
@@ -64,21 +67,18 @@ function loadImages() {
   loading = true;
 
   fetchImages(form.elements.searchQuery.value.trim(), page)
-    .then(images => {
-      if (images.length < PER_PAGE) {
+    .then(data => {
+      const { hits, totalHits } = data;
+
+      if (hits.length < PER_PAGE) {
         hasMoreImages = false;
       }
 
-      if (!totalHitsDisplayed) {
-        Notiflix.Notify.success(`Total images found: ${images.totalHits}`);
-        totalHitsDisplayed = true;
-      }
-
-      updateGallery(images);
+      updateGallery({ hits, totalHits });
       loading = false;
       page++;
 
-      console.log(`Page: ${page}, Total Images: ${images.length}`);
+      console.log(`Page: ${page}, Total Images: ${totalHits}`);
     })
     .catch(error => {
       console.error('Error fetching images:', error);
