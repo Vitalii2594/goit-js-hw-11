@@ -8,8 +8,7 @@ import { PER_PAGE } from './constants';
 const form = document.getElementById('search-form');
 const gallery = document.querySelector('.gallery');
 let page = 1;
-let loading = false;
-let totalImages = 0; // Додали змінну для збереження загальної кількості зображень
+let loading = false; // Додали змінну, яка вказує, чи вже відбувається завантаження
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -29,8 +28,6 @@ function updateGallery(images) {
 
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
-    totalImages = images.length; // Запам'ятовуємо загальну кількість зображень при першому завантаженні
-    Notiflix.Notify.success(`Total images found: ${totalImages}`);
   } else {
     gallery.innerHTML += cardsHtml;
   }
@@ -55,41 +52,36 @@ function createCardHtml(image) {
   `;
 }
 
-async function loadImages() {
+function loadImages() {
+  // Якщо вже відбувається завантаження, не відправляти новий запит
   if (loading) {
     return;
   }
 
-  loading = true;
+  loading = true; // Позначаємо, що розпочинається завантаження
 
-  try {
-    const result = await fetchImages(
-      form.elements.searchQuery.value.trim(),
-      page
-    );
-
-    if (page === 1) {
-      totalImages = result.totalHits; // Оновлюємо загальну кількість зображень при кожному запиті
-      Notiflix.Notify.success(`Total images found: ${totalImages}`);
-    }
-
-    updateGallery(result.images);
-    loading = false;
-    page++;
-  } catch (error) {
-    console.error('Error fetching images:', error);
-    Notiflix.Notify.failure('Something went wrong. Please try again.');
-    loading = false;
-  }
+  // Використовуємо `fetchImages` для отримання зображень
+  fetchImages(form.elements.searchQuery.value.trim(), page)
+    .then(images => {
+      updateGallery(images);
+      loading = false; // Позначаємо, що завантаження завершилося
+      page++; // Збільшуємо номер сторінки для наступного завантаження
+    })
+    .catch(error => {
+      console.error('Error fetching images:', error);
+      Notiflix.Notify.failure('Something went wrong. Please try again.');
+      loading = false; // Позначаємо, що завантаження завершилося (навіть якщо виникла помилка)
+    });
 }
 
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
-    return ' ';
+    return ' '; // Повертаємо простий рядок, оскільки дані вже завантажуються з `loadImages`
   },
   responseType: 'text',
   history: false,
   scrollThreshold: 300,
 });
 
+// При прокручуванні вниз викликаємо функцію `loadImages`
 infScroll.on('scrollThreshold', loadImages);
