@@ -10,13 +10,15 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
+let totalHitsDisplayed = false;
 
 form.addEventListener('submit', handleFormSubmit);
 
 async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
-  hasMoreImages = true; // Додали змінну для визначення, чи є ще зображення
+  hasMoreImages = true;
+  totalHitsDisplayed = false;
   loadImages();
 }
 
@@ -65,6 +67,11 @@ function loadImages() {
     .then(images => {
       if (images.length < PER_PAGE) {
         hasMoreImages = false;
+      }
+
+      if (!totalHitsDisplayed) {
+        Notiflix.Notify.success(`Total images found: ${images.totalHits}`);
+        totalHitsDisplayed = true;
       }
 
       updateGallery(images);
