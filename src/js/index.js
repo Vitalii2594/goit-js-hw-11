@@ -2,8 +2,8 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox'; 
 import 'simplelightbox/dist/simple-lightbox.min.css'; 
 import InfiniteScroll from 'infinite-scroll'; 
-import { fetchImages } from './api'; 
-import { PER_PAGE } from './constants'; 
+import axios from 'axios'; 
+import { API_KEY, BASE_URL, PER_PAGE } from './constants'; 
   
 const form = document.getElementById('search-form'); 
 const gallery = document.querySelector('.gallery'); 
@@ -15,6 +15,37 @@ let firstLoad = true;
 const successMessage = 'Ура! Знайдено зображень:';
 
 form.addEventListener('submit', handleFormSubmit);
+
+async function fetchImages(query, page) {
+  const params = {
+    key: API_KEY,
+    q: query,
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+    page: page,
+    per_page: PER_PAGE,
+  };
+
+  try {
+    const response = await axios.get(BASE_URL, { params });
+
+    if (response.data && response.data.hits) {
+      const { hits, totalHits } = response.data;
+
+      if (hits.length === 0) {
+        throw new Error('No images found for the given query');
+      }
+
+      return { hits, totalHits };
+    } else {
+      throw new Error('Invalid response format');
+    }
+  } catch (error) {
+    console.error('Error fetching images:', error);
+    throw new Error('Error fetching images:', error);
+  }
+}
 
 async function handleFormSubmit(event) {
   event.preventDefault();
@@ -72,20 +103,23 @@ function loadImages() {
 
   fetchImages(form.elements.searchQuery.value.trim(), page)
     .then(images => {
-      if (images.length < PER_PAGE) {
-        hasMoreImages = false;
+      if (images && images.hits) {
+        if (images.hits.length < PER_PAGE) {
+          hasMoreImages = false;
+        }
+
+        updateGallery(images.hits);
+        loading = false;
+        page++;
+
+        console.log(`Page: ${page}, Total Images: ${images.hits.length}`);
+      } else {
+        throw new Error('Invalid images response format');
       }
-
-      updateGallery(images);
-      loading = false;
-      page++;
-
-      console.log(`Page: ${page}, Total Images: ${images.length}`);
-      console.log('Success:', images); // Додав виведення для відстеження успішного отримання зображень
     })
     .catch(error => {
       console.error('Error fetching images:', error);
-      console.log('Error Details:', error.response.data); // Додав виведення для отримання деталей про помилку
+      console.log('Error Details:', error.response?.data); // Додав виведення для отримання деталей про помилку
       Notiflix.Notify.failure('Щось пішло не так. Будь ласка, спробуйте знову.');
       loading = false;
     });
