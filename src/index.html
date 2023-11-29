@@ -3,28 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/styles.css" />
-    <title>Image Search App</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Search Images</title>
   </head>
   <body>
     <div class="container">
-      <form class="search-form" id="search-form">
+      <!-- Форма пошуку зображень -->
+      <form class="search-form" id="searchForm">
         <input
           type="text"
           name="searchQuery"
           autocomplete="off"
-          placeholder="Search images..."
+          placeholder="search images ..."
         />
         <button type="submit">Search</button>
       </form>
 
-      <div class="gallery">
-        <!-- Image cards will be added here dynamically -->
-      </div>
-
-      <button id="loadMore" class="load-more-hidden" disabled>Load More</button>
+      <!-- Картки зображень -->
+      <div class="gallery"></div>
+      <span class="js-span"></span>
+      <button type="button" class="load-more-hidden" id="loadMore" disabled>
+        Load more
+      </button>
     </div>
 
-    <script src="./js/index.js" type="module"></script>
+    <script type="module" src="./js/index.js"></script>
   </body>
 </html>
