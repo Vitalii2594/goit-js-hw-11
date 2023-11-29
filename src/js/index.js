@@ -81,9 +81,11 @@ function loadImages() {
       page++;
 
       console.log(`Page: ${page}, Total Images: ${images.length}`);
+      console.log('Success:', images); // Додав виведення для відстеження успішного отримання зображень
     })
     .catch(error => {
       console.error('Error fetching images:', error);
+      console.log('Error Details:', error.response.data); // Додав виведення для отримання деталей про помилку
       Notiflix.Notify.failure('Щось пішло не так. Будь ласка, спробуйте знову.');
       loading = false;
     });
