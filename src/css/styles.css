@@ -28,7 +28,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: center;
+  justify-content: space-around; /* Це було змінено на space-around для рівномірного розподілу */
 }
 
 .gallery {
@@ -41,7 +41,10 @@ body {
 }
 
 .photo-card {
-  flex-basis: calc((100% - 12px) / 2);
+  flex-basis: calc(
+    (100% - 12px * 2) / 3
+  ); /* Змінено для врахування проміжку між картками */
+  margin-bottom: 12px; /* Додано проміжок між рядками карток */
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -110,7 +113,7 @@ input {
 
 @media screen and (min-width: 668px) {
   .photo-card {
-    flex-basis: calc((100% - 12px) / 2);
+    flex-basis: calc((100% - 12px * 2) / 3);
   }
 }
 
@@ -119,6 +122,6 @@ input {
     max-width: 1158px;
   }
   .photo-card {
-    flex-basis: calc((100% - 24px) / 3);
+    flex-basis: calc((100% - 24px * 2) / 3);
   }
 }
