@@ -4,7 +4,7 @@ import { Report } from 'notiflix';
  import SimpleLightbox from 'simplelightbox'; 
  import 'simplelightbox/dist/simple-lightbox.min.css'; 
  import 'simplelightbox/dist/simple-lightbox.min.css'; 
- import { PER_PAGE } from './constans'; 
+ import { PER_PAGE } from './constants'; 
   
  const refs = { 
    formEl: document.getElementById('searchForm'), 
