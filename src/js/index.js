@@ -1,17 +1,18 @@
-import Notiflix from 'notiflix';
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-import InfiniteScroll from 'infinite-scroll';
-import { fetchImages } from './api';
-import { PER_PAGE } from './constants';
+import Notiflix from 'notiflix'; 
+import SimpleLightbox from 'simplelightbox'; 
+import 'simplelightbox/dist/simple-lightbox.min.css'; 
+import InfiniteScroll from 'infinite-scroll'; 
+import { fetchImages } from './api'; 
+import { PER_PAGE } from './constants'; 
+  
+const form = document.getElementById('search-form'); 
+const gallery = document.querySelector('.gallery'); 
+let page = 1; 
+let loading = false; 
+let hasMoreImages = true; 
+let firstLoad = true;
 
-const form = document.getElementById('search-form');
-const gallery = document.querySelector('.gallery');
-let page = 1;
-let loading = false;
-let hasMoreImages = true;
-let totalHits;
-let firstLoad = true; // Додали нову змінну
+const successMessage = 'Ура! Ми знайшли';
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -19,14 +20,13 @@ async function handleFormSubmit(event) {
   event.preventDefault();
   page = 1;
   hasMoreImages = true;
-  totalHits = undefined;
-  firstLoad = true; // Скидаємо індикатор при новому пошуку
+  firstLoad = true;
   loadImages();
 }
 
 function updateGallery(images) {
   if (!images || images.length === 0) {
-    Notiflix.Notify.info('No images found.');
+    Notiflix.Notify.info('Зображення не знайдено.');
     return;
   }
 
@@ -42,25 +42,23 @@ function updateGallery(images) {
   lightbox.refresh();
 
   if (firstLoad) {
-    // Додаємо перевірку на перше завантаження
-    totalHits = images[0].totalHits;
-    Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-    firstLoad = false; // Встановлюємо, що перше повідомлення вже виведено
+    Notiflix.Notify.success(`${successMessage} ${images[0].totalHits} зображень.`);
+    firstLoad = false;
   }
 }
 
 function createCardHtml(image) {
   return `
-    <div class="photo-card">
-      <a href="${image.largeImageURL}" class="lightbox-link">
-        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />
-      </a>
-      <div class="info">
-        <p class="info-item"><b>Likes:</b> ${image.likes}</p>
-        <p class="info-item"><b>Views:</b> ${image.views}</p>
-        <p class="info-item"><b>Comments:</b> ${image.comments}</p>
-        <p class="info-item"><b>Downloads:</b> ${image.downloads}</p>
-      </div>
+    <div class="photo-card"> 
+      <a href="${image.largeImageURL}" class="lightbox-link"> 
+        <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" /> 
+      </a> 
+      <div class="info"> 
+        <p class="info-item"><b>Likes:</b> ${image.likes}</p> 
+        <p class="info-item"><b>Views:</b> ${image.views}</p> 
+        <p class="info-item"><b>Comments:</b> ${image.comments}</p> 
+        <p class="info-item"><b>Downloads:</b> ${image.downloads}</p> 
+      </div> 
     </div>
   `;
 }
@@ -86,7 +84,7 @@ function loadImages() {
     })
     .catch(error => {
       console.error('Error fetching images:', error);
-      Notiflix.Notify.failure('Something went wrong. Please try again.');
+      Notiflix.Notify.failure('Щось пішло не так. Будь ласка, спробуйте знову.');
       loading = false;
     });
 }
@@ -101,3 +99,4 @@ const infScroll = new InfiniteScroll('.gallery', {
 });
 
 infScroll.on('scrollThreshold', loadImages);
+
