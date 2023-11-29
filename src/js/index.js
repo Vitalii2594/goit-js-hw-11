@@ -118,6 +118,3 @@ const infScroll = new InfiniteScroll('.gallery', {
 
 // Додаємо обробник події "scrollThreshold", який викликає функцію завантаження зображень
 infScroll.on('scrollThreshold', loadImages);
-
-// Отримуємо дані з сервера Pixabay API та викликаємо функцію обробки даних
-searchGallery();
