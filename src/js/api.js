@@ -1,4 +1,3 @@
-// api.js
 import axios from 'axios';
 import { API_KEY, BASE_URL, PER_PAGE } from './constants';
 
@@ -15,13 +14,13 @@ async function fetchImages(query, page) {
 
   try {
     const response = await axios.get(BASE_URL, { params });
-    const { hits } = response.data;
+    const { hits, totalHits } = response.data;
 
     if (hits.length === 0) {
       throw new Error('No images found for the given query');
     }
 
-    return hits;
+    return { hits, totalHits }; // Modified to return totalHits along with hits
   } catch (error) {
     throw new Error('Error fetching images:', error);
   }
