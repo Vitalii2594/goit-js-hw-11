@@ -40,7 +40,7 @@ body {
   padding: 12px;
   border-radius: 8px;
   transition: box-shadow 0.3s;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.522);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -59,7 +59,7 @@ body {
   left: 0;
   width: 100%;
   height: 60px; /* Задайте фіксовану висоту для поля з описом */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.668);
   padding: 10px;
   text-align: center;
   border-radius: 0 0 8px 8px;
