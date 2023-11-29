@@ -5,16 +5,16 @@
 body {
   background-color: #5b6c6e;
   font-family: 'Arial', sans-serif;
-}
-
-img {
-  max-width: 100%;
+  margin: 0;
 }
 
 .container {
-  max-width: 448px;
-  padding: 0 15px;
+  max-width: 600px;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .js-span {
@@ -24,14 +24,20 @@ img {
   margin: 10px auto;
 }
 
-.gallery {
+.gallery-container {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
+}
+
+.gallery {
+  width: 100%;
   padding: 12px;
   border-radius: 8px;
   transition: box-shadow 0.3s;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .photo-card {
@@ -40,6 +46,18 @@ img {
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s, transform 0.3s;
+  position: relative;
+}
+
+.photo-description {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
 }
 
 .photo-card:hover {
@@ -50,7 +68,8 @@ img {
 .photo-card a {
   display: block;
   overflow: hidden;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
 .photo-card a img {
@@ -69,9 +88,9 @@ img {
   margin: 0 auto;
   display: flex;
   margin-bottom: 16px;
-
   justify-content: center;
 }
+
 input {
   width: 100%;
   padding: 8px;
