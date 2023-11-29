@@ -5,16 +5,16 @@
 body {
   background-color: #5b6c6e;
   font-family: 'Arial', sans-serif;
-  margin: 0;
+}
+
+img {
+  max-width: 100%;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1158px; /* Змінено максимальну ширину для відповідності media query */
+  padding: 0 15px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .js-span {
@@ -24,43 +24,24 @@ body {
   margin: 10px auto;
 }
 
-.gallery-container {
+.gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content: space-around; /* Це було змінено на space-around для рівномірного розподілу */
-}
-
-.gallery {
-  width: 100%;
+  justify-content: space-around; /* Змінено justify-content на space-around для рівномірного розподілу */
   padding: 12px;
   border-radius: 8px;
   transition: box-shadow 0.3s;
-  background-color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .photo-card {
   flex-basis: calc(
     (100% - 12px * 2) / 3
-  ); /* Змінено для врахування проміжку між картками */
-  margin-bottom: 12px; /* Додано проміжок між рядками карток */
+  ); /* Змінено flex-basis для відповідності сітці 3 на ширину екрана */
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s, transform 0.3s;
-  position: relative;
-}
-
-.photo-description {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  text-align: center;
-  border-radius: 0 0 8px 8px;
 }
 
 .photo-card:hover {
@@ -71,8 +52,7 @@ body {
 .photo-card a {
   display: block;
   overflow: hidden;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border-bottom: 1px solid #ddd;
 }
 
 .photo-card a img {
@@ -118,9 +98,6 @@ input {
 }
 
 @media screen and (min-width: 1158px) {
-  .container {
-    max-width: 1158px;
-  }
   .photo-card {
     flex-basis: calc((100% - 24px * 2) / 3);
   }
