@@ -161,5 +161,3 @@ function clearGallery() {
   refs.spanEl.innerHTML = '';
   refs.galleryEl.innerHTML = '';
 }
-
-// ... (інший існуючий код)
