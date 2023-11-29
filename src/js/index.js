@@ -11,6 +11,7 @@ let page = 1;
 let loading = false;
 let hasMoreImages = true;
 let totalHits;
+let firstLoad = true; // Додали нову змінну
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -19,6 +20,7 @@ async function handleFormSubmit(event) {
   page = 1;
   hasMoreImages = true;
   totalHits = undefined;
+  firstLoad = true; // Скидаємо індикатор при новому пошуку
   loadImages();
 }
 
@@ -39,9 +41,11 @@ function updateGallery(images) {
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
 
-  if (totalHits === undefined) {
+  if (firstLoad) {
+    // Додаємо перевірку на перше завантаження
     totalHits = images[0].totalHits;
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+    firstLoad = false; // Встановлюємо, що перше повідомлення вже виведено
   }
 }
 
