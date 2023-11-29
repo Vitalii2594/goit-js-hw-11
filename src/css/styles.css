@@ -16,13 +16,12 @@ body {
 
 .input {
   width: 80%;
-  height: 30px;
+  height: 25px;
   padding: 8px;
 }
 .button-search {
-  width: 10%;
-  height: 30px;
-  padding: 8px;
+  width: 6%;
+  height: 22px;
 }
 
 .js-span {
