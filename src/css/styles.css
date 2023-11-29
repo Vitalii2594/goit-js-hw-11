@@ -19,6 +19,11 @@ body {
   height: 30px;
   padding: 8px;
 }
+.button-search {
+  width: 10%;
+  height: 30px;
+  padding: 8px;
+}
 
 .js-span {
   display: flex;
