@@ -12,7 +12,7 @@ let loading = false;
 let hasMoreImages = true; 
 let firstLoad = true;
 
-const successMessage = 'Ура! Ми знайшли';
+const successMessage = 'Ура! Знайдено зображень:';
 
 form.addEventListener('submit', handleFormSubmit);
 
@@ -42,7 +42,7 @@ function updateGallery(images) {
   lightbox.refresh();
 
   if (firstLoad) {
-    Notiflix.Notify.success(`${successMessage} ${images[0].totalHits} зображень.`);
+    Notiflix.Notify.success(`${successMessage} ${images[0].totalHits}.`);
     firstLoad = false;
   }
 }
@@ -99,4 +99,3 @@ const infScroll = new InfiniteScroll('.gallery', {
 });
 
 infScroll.on('scrollThreshold', loadImages);
-
