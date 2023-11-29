@@ -10,7 +10,7 @@ const gallery = document.querySelector('.gallery');
 let page = 1;
 let loading = false;
 let hasMoreImages = true;
-let totalHits;
+let totalHits = data.totalHits;
 
 form.addEventListener('submit', handleFormSubmit);
 
