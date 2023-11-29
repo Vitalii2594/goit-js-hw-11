@@ -34,20 +34,17 @@ function updateGallery(images) {
   // Оновлюємо галерею зображень
   if (page === 1) {
     gallery.innerHTML = cardsHtml;
-  } else {
-    gallery.innerHTML += cardsHtml;
-  }
 
-  // Ініціалізуємо lightbox для перегляду зображень
-  const lightbox = new SimpleLightbox('.gallery a');
-  lightbox.refresh();
+    // Ініціалізуємо lightbox для перегляду зображень
+    const lightbox = new SimpleLightbox('.gallery a');
+    lightbox.refresh();
 
-  // Перевіряємо, чи не виводили вже повідомлення про загальну кількість зображень
-  if (totalHits === undefined) {
     // Встановлюємо totalHits як кількість з першого зображення
     totalHits = images[0].totalHits;
     // Виводимо повідомлення
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+  } else {
+    gallery.innerHTML += cardsHtml;
   }
 }
 
