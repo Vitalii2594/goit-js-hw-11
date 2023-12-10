@@ -12,7 +12,7 @@ img {
 }
 
 .container {
-  max-width: 448px;
+  max-width: 1448px;
   padding: 0 15px;
   margin: 0 auto;
 }
@@ -27,7 +27,7 @@ img {
 .gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 20px;
   justify-content: center;
   padding: 12px;
   border-radius: 8px;
@@ -35,11 +35,14 @@ img {
 }
 
 .photo-card {
-  flex-basis: calc((100% - 12px) / 2);
+  display: flex;
+  flex-flow: wrap row;
+  width: 355px;
+  height: 295px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s, transform 0.3s;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .photo-card:hover {
@@ -47,24 +50,14 @@ img {
   transform: translateY(-4px);
 }
 
-.photo-card a {
-  display: block;
-  overflow: hidden;
-  border-bottom: 1px solid #ddd;
+.load-more-hidden {
+  visibility: hidden;
 }
 
-.photo-card a img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px 8px 0 0;
-  transition: transform 0.3s;
+.img-galery {
+  width: 355px;
+  height: 195px;
 }
-
-.photo-card a:hover img {
-  transform: scale(1.1);
-}
-
 .search-form {
   margin: 0 auto;
   display: flex;
@@ -72,34 +65,48 @@ img {
 
   justify-content: center;
 }
-input {
-  width: 100%;
-  padding: 8px;
-}
 
+input {
+  width: 355px;
+  padding: 8px;
+  border-radius: 8px;
+}
+button {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba(165, 156, 156, 0.328);
+}
 .info {
   display: flex;
   gap: 8px;
-  color: #ddd;
-  padding: 8px;
-  border-radius: 0 0 8px 8px;
+  font-weight: 200;
+  font-size: 14px;
+  color: rgb(92, 88, 88);
+  padding: 15px;
 }
 
-.info p:hover {
-  color: #9fbddc;
-}
-
-@media screen and (min-width: 668px) {
+@media screen and (min-width: 768px) {
   .photo-card {
-    flex-basis: calc((100% - 12px) / 2);
+    width: 339px;
+    height: 295px;
+    width: 339px;
+    height: 295px;
+  }
+  input {
+    width: 645px;
   }
 }
 
-@media screen and (min-width: 1158px) {
-  .container {
-    max-width: 1158px;
-  }
+@media screen and (min-width: 1440px) {
   .photo-card {
-    flex-basis: calc((100% - 24px) / 3);
+    width: 440px;
+    height: 395px;
+  }
+  .img-galery {
+    width: 410px;
+    height: 295px;
+  }
+  input {
+    width: 1299px;
   }
 }
